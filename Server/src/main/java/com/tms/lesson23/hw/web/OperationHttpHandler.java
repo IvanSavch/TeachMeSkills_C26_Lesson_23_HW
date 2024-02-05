@@ -21,13 +21,16 @@ public class OperationHttpHandler implements HttpHandler {
 
         String s = new String(bytes,"UTF-8");
 
+
         Operation operation = gson.fromJson(s,Operation.class);
         Operation calculate = operationService.calculate(operation);
-
+        System.out.println(calculate);
         String json = gson.toJson(calculate);
 
         exchange.sendResponseHeaders(200, json.length());
         exchange.getResponseHeaders().add("Content-Type", "application/json");
+
+
 
         PrintWriter printWriter = new PrintWriter(exchange.getResponseBody());
         printWriter.print(json);

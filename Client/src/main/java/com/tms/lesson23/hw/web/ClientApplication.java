@@ -1,4 +1,4 @@
-package com.tms.lesson23.hw;
+package com.tms.lesson23.hw.web;
 
 import com.google.gson.Gson;
 import com.tms.lesson23.hw.console.ConsoleReader;
@@ -13,17 +13,18 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class ClientApplication {
-    private static ConsoleWriter consoleWriter = new ConsoleWriter();
+    private final ConsoleWriter consoleWriter = new ConsoleWriter();
+    private final ConsoleReader reader = new ConsoleReader();
 
-    public static void main(String[] args) {
+    public void run() {
         Gson gson = new Gson();
 
         consoleWriter.writer("Enter num1: ");
-        double num1 = ConsoleReader.readNum();
+        double num1 = reader.readNum();
         consoleWriter.writer("Enter num2: ");
-        double num2 = ConsoleReader.readNum();
+        double num2 = reader.readNum();
         consoleWriter.writer("Enter operation: ");
-        String type = ConsoleReader.readOperationType();
+        String type = reader.readOperationType();
         Operation operation = new Operation(num1, num2, type);
 
         String json = gson.toJson(operation);
@@ -39,11 +40,7 @@ public class ClientApplication {
             httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
             Operation operation1 = gson.fromJson(httpResponse.body(), Operation.class);
             System.out.println(operation1);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
+        } catch (URISyntaxException | IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
 
